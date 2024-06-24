@@ -1,0 +1,50 @@
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int partition(vector<int> &n, int l, int r) {
+  int pivot = n[r];
+  int i = l;
+  for (int j = l; j < r; j++) {
+    if (n[j] <= pivot) {
+      swap(n[i], n[j]);
+      i++;
+    }
+  }
+  swap(n[i], n[r]);
+  return i;
+}
+
+int findMedian(vector<int> &n, int l, int r, int k) {
+  if (l == r) {
+    return n[l];
+  }
+
+  int p = partition(n, l, r);
+
+  if (k == p) {
+    return n[p];
+  } else if (k < p) {
+    return findMedian(n, l, p - 1, k);
+  } else {
+    return findMedian(n, p + 1, r, k);
+  }
+}
+
+int median(vector<int> &n) {
+  int m = n.size();
+  int k = (m - 1) / 2;
+  return findMedian(n, 0, m - 1, k);
+}
+
+int main() {
+  vector<int> n = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
+
+  int res = median(n);
+
+  cout << "La mediana es: " << res << endl;
+
+  return 0;
+}

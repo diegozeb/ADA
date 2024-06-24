@@ -1,0 +1,56 @@
+//TEMA A
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct obj {
+
+  int weight;
+  int value;
+
+};
+
+void mochilaBacktracking(const vector<obj> &items,
+                         vector<obj> &mochila, int capacidadActual,
+                         int &valorActual, int &mejorValor, int indice) 
+                         {
+  if (indice == items.size()) {
+    if (valorActual > mejorValor) {
+      mejorValor = valorActual;
+      mochila = vector<obj>(items.begin(), items.begin() + indice);
+    }
+    return;
+  }
+
+  if (capacidadActual - items[indice].weight >= 0) {
+    mochila.push_back(items[indice]);
+    valorActual += items[indice].value;
+
+    mochilaBacktracking(items, mochila, capacidadActual - items[indice].weight,
+                        valorActual, mejorValor, indice + 1);
+
+    mochila.pop_back();
+    valorActual -= items[indice].value;
+  }
+
+  mochilaBacktracking(items, mochila, capacidadActual, valorActual, mejorValor,
+                      indice + 1);
+}
+
+int main() {
+  vector<obj> items = {
+      {30, 10}, {15, 7}, {11,6}, { 8,4}, {2,2}};
+  int capacidadMochila = 20;
+
+  vector<obj> mochila;
+  int valorActual = 0;
+  int mejorValor = 0;
+
+  mochilaBacktracking(items, mochila, capacidadMochila, valorActual, mejorValor,
+                      0);
+
+  cout << "Mejor valor obtenido: " << mejorValor << endl;
+
+
+  return 0;
+}

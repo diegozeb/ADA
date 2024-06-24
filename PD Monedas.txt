@@ -1,0 +1,45 @@
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
+
+using namespace std;
+
+int min_mone(int n, int p, vector<int> mon)
+{
+  int** tab = new int*[n+1];
+  for (int i = 0; i <= n; ++i) 
+      tab[i] = new int[p+1];
+
+  for(int i = 0; i<=n;i++)
+  {
+    tab[i][0] = 0;
+  }
+
+  for(int i = 1; i <= n; i++)
+  {
+    for(int j = 1; j <= p; j++)
+    {
+      if(j - mon[i-1] < 0)
+        tab[i][j] = tab[i-1][j];
+      else if (i-1 <= 0)
+        tab[i][j] = 1 + tab[i][j-mon[i-1]];
+      else    
+        tab[i][j] = min(tab[i-1][j] , 1 + tab[i][j - mon[i-1]]);
+
+    }
+
+  }
+  return tab[n][p]; 
+
+}
+
+int main() 
+{
+  vector<int> monedas= {1,4,6};
+  int n = monedas.size();
+  int p = 8;
+
+  cout << "cantidad mínima de monedas = " << min_mone(n,p, monedas) << endl;
+
+}
